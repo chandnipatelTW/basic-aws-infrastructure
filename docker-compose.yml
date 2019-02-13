@@ -1,0 +1,12 @@
+version: '3.2'
+services:
+  infrabox:
+    image: de-infrabox
+    build: .
+    stdin_open: true
+    tty: true
+    volumes:
+      - type: bind
+        source: .
+        target: /project
+      - ./root:/root

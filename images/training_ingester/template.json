@@ -1,0 +1,26 @@
+{
+  "variables": {},
+  "builders": [{
+    "type": "amazon-ebs",
+    "ami_name" : "data-eng-ingester-training-{{timestamp}}",
+    "ami_description": "Ingester for data engineering training",
+    "source_ami_filter" : {
+      "most_recent": true,
+      "filters": {
+        "owner-alias": "amazon",
+        "name": "amzn2-ami-hvm-2.0.*-x86_64-gp2"
+      }
+    },
+    "ssh_username": "ec2-user",
+    "instance_type": "t2.medium",
+    "tags" : {
+        "Name": "Data Engineering Training Ingester"
+    }
+  }],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "./install_monitoring.sh"
+    }
+  ]
+}
