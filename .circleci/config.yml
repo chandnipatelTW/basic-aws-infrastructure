@@ -16,9 +16,3 @@ workflows:
   build_and_deploy:
     jobs:
     - build-test-environment:
-        type: approval
-        filters:
-          branches:
-            only:
-            - bangalore-april-2019-test
-            - master
