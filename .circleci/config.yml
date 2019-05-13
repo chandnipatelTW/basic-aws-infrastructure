@@ -11,14 +11,6 @@ jobs:
     - checkout
     - run:
         command: echo "Hello world"
-
-  build-production-environment:
-      <<: *defaults
-      steps:
-      - checkout
-      - run:
-          command: echo "Hello world"
-
 workflows:
   version: 2
   build_and_deploy:
@@ -29,9 +21,4 @@ workflows:
           branches:
             only:
             - bangalore-april-2019-test
-    - build-production-environment:
-        type: approval
-        filters:
-          branches:
-            only:
-            - bangalore-april-2019
+            - master
