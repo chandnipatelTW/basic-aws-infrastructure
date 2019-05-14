@@ -1,21 +1,14 @@
 defaults: &defaults
   docker:
-  - image: circleci/openjdk:8-jdk
-  working_directory: /home/circleci/project
+  - image: rajashrik/de-infrabox
 
 version: 2
 jobs:
  build:
     <<: *defaults
     steps:
-    - checkout
-    - run:
-        command: sudo apt-get install docker
-    - setup_remote_docker
-    - run:
-        command: docker-compose run --rm infrabox
-    - run:
-        command: exit
+    - run: ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT_TEST
+
 
 workflows:
   version: 2
