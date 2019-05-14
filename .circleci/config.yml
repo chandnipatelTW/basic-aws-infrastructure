@@ -43,7 +43,13 @@ workflows:
   version: 2
   build:
     jobs:
+      - approve-build-deploy:
+            type: approval
       - build:
-          type: approval
+          requires:
+            - approve-build-deploy
+      - approve-destroy-deploy:
+            type: approval
       - destroy:
-          type: approval
+          requires:
+            - approve-destroy-deploy
