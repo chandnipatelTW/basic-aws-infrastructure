@@ -1,6 +1,7 @@
 defaults: &defaults
   docker:
-  - image: rajashrik/de-infrabox
+  - image: rajashrik/de-infrabox-v1
+  working_directory: /home/circleci/project
 
 version: 2
 jobs:
@@ -9,8 +10,8 @@ jobs:
     steps:
     - checkout
     - run:
-         command: ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT_TEST
-
+        command: source /okta_venv/bin/activate;
+                ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT
 
 workflows:
   version: 2
