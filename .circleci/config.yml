@@ -8,7 +8,8 @@ jobs:
     <<: *defaults
     steps:
     - checkout
-    - run: ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT_TEST
+    - run:
+         command: ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT_TEST
 
 
 workflows:
