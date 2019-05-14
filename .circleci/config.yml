@@ -5,14 +5,20 @@ defaults: &defaults
 
 version: 2
 jobs:
-  build-test-environment:
+ build:
     <<: *defaults
     steps:
     - checkout
     - run:
-        command: echo "Hello world"
+        command: sudo apt-get install docker
+    - setup_remote_docker
+    - run:
+        command: docker-compose run --rm infrabox
+    - run:
+        command: exit
+
 workflows:
   version: 2
-  build_and_deploy:
+  build:
     jobs:
-    - build-test-environment
+     - build
