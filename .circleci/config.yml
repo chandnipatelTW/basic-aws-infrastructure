@@ -11,19 +11,19 @@ jobs:
     - checkout
     - run:
         command: source /okta_venv/bin/activate;
-                ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT
-                ./scripts/create_key_pair.sh $TRAINING_COHORT
+                ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT;
+                ./scripts/create_key_pair.sh $TRAINING_COHORT;
 #                ./scripts/build_ami.sh training_kafka
 #                ./scripts/build_ami.sh training_ingester
     - run:
         command: source /okta_venv/bin/activate;
-                ./scripts/run_terraform.sh $TRAINING_COHORT base_networking apply
-                ./scripts/run_terraform.sh $TRAINING_COHORT bastion apply
-                ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket apply
-                ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply
-                ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply
-                ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply
-                ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply
+                ./scripts/run_terraform.sh $TRAINING_COHORT base_networking apply;
+                ./scripts/run_terraform.sh $TRAINING_COHORT bastion apply;
+                ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket apply;
+                ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply;
+                ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply;
+                ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply;
+                ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply;
 workflows:
   version: 2
   build:
