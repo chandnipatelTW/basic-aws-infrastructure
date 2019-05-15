@@ -31,13 +31,13 @@ jobs:
          echo 'export TRAINING_COHORT=bangalore-april-2019-test' >> $BASH_ENV;
     - run:
         command: source /okta_venv/bin/activate;
-                ./scripts/run_terraform.sh $TRAINING_COHORT base_networking apply -input=false;
-                ./scripts/run_terraform.sh $TRAINING_COHORT bastion apply -input=false;
-                ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket apply -input=false ;
-                ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply -input=false  -var-file=test-env.tfvars;
-                ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false  -var-file=test-env.tfvars;
-                ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply -input=false  -var-file=test-env.tfvars;
-                ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply -input=false ;
+                ./scripts/run_terraform.sh $TRAINING_COHORT base_networking apply -input=false -auto-approve;
+                ./scripts/run_terraform.sh $TRAINING_COHORT bastion apply -input=false -auto-approve;
+                ./scripts/run_terraform.sh $TRAINING_COHORT training_bucket apply -input=false -auto-approve;
+                ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply -input=false  -var-file=test-env.tfvars -auto-approve;
+                ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false  -var-file=test-env.tfvars -auto-approve;
+                ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply -input=false  -var-file=test-env.tfvars -auto-approve;
+                ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply -input=false -auto-approve;
 
  destroyTestEnvironment:
     <<: *defaults
