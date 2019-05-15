@@ -44,5 +44,5 @@ module "training_kafka" {
   subnet_id = "${data.terraform_remote_state.base_networking.private_subnet_ids[0]}"
   ec2_key_pair = "tw-dataeng-${var.cohort}"
   dns_zone_id = "${data.terraform_remote_state.base_networking.dns_zone_id}"
-  instance_type = "m4.large"
+  instance_type = "${var.kafka["instance_type"]}"
 }

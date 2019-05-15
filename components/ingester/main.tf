@@ -43,7 +43,7 @@ module "ingester" {
   source="../../modules/ingester"
 
   dns_zone_id = "${data.terraform_remote_state.base_networking.dns_zone_id}"
-  instance_type = "t2.medium"
+  instance_type = "${var.ingester["instance_type"]}"
   subnet_id = "${data.terraform_remote_state.base_networking.public_subnet_ids[0]}"
   ec2_key_pair = "tw-dataeng-${var.cohort}"
   vpc_id = "${data.terraform_remote_state.base_networking.vpc_id}"

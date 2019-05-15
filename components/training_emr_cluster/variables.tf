@@ -5,3 +5,14 @@ variable "cohort" {
 variable "aws_region" {
   description = "Region in which to build resources."
 }
+
+variable "emr_cluster" {
+  type = "map"
+  default = {
+    "master_type"  = "m1.medium"
+    "core_type" = "m1.medium"
+    "core_count" = "2"
+    "ebs_root_volume_size" = "10"
+    "size" = "10"
+  }
+}
