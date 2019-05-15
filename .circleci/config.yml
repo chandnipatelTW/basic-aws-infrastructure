@@ -94,19 +94,35 @@ workflows:
   build:
     jobs:
       - dummy
+
+      - approveBuildTestEnvironment:
+          type: approval
+          requires:
+            - dummy
       - buildTestEnvironment:
+          requires:
+            - approveBuildTestEnvironment
+
+      - approveDestroyTestEnvironment:
           type: approval
           requires:
             - dummy
       - destroyTestEnvironment:
+          requires:
+            - approveDestroyTestEnvironment
+
+      - approveBuildProductionEnvironment:
           type: approval
           requires:
             - dummy
       - buildProductionEnvironment:
+          requires:
+            - approveBuildProductionEnvironment
+
+      - approveDestroyProductionEnvironment:
           type: approval
           requires:
             - dummy
       - destroyProductionEnvironment:
-          type: approval
           requires:
-            - dummy
+            - approveDestroyProductionEnvironment
