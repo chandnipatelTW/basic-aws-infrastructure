@@ -53,6 +53,11 @@ resource "aws_emr_cluster" "training_cluster" {
     }
   }
 
+  provisioner "file" {
+    source      = "../configs/training_emr_cluster/capacity_scheduler.xml"
+    destination = "/etc/hadoop/conf.empty/capacity-scheduler.xml"
+  }
+
   tags = "${merge(
     local.common_tags,
     map(
