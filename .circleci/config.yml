@@ -11,16 +11,20 @@ jobs:
     - run:
         command: echo "hello world"
 
+ firstTimeSetup:
+   <<: *defaults
+   steps:
+   - checkout
+   - run:
+       command: source /okta_venv/bin/activate;
+               ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT;
+               ./scripts/create_key_pair.sh $TRAINING_COHORT;
+#                   ./scripts/build_ami.sh training_kafka
+#                   ./scripts/build_ami.sh training_ingester
  build:
     <<: *defaults
     steps:
     - checkout
-    - run:
-        command: source /okta_venv/bin/activate;
-                ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT;
-                ./scripts/create_key_pair.sh $TRAINING_COHORT;
-#                ./scripts/build_ami.sh training_kafka
-#                ./scripts/build_ami.sh training_ingester
     - run:
         command: source /okta_venv/bin/activate;
                 ./scripts/run_terraform.sh $TRAINING_COHORT base_networking apply -input=false -auto-approve;
@@ -50,6 +54,10 @@ workflows:
   build:
     jobs:
       - dummy
+      - firstTimeSetup:
+          type: approval
+          requires:
+            - dummy
       - build:
           type: approval
           requires:
