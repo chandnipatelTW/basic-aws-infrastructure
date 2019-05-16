@@ -53,13 +53,13 @@
 
     <property>
         <name>yarn.scheduler.capacity.root.default.capacity</name>
-        <value>25</value>
+        <value>10</value>
         <description>Default queue target capacity.</description>
     </property>
 
     <property>
         <name>yarn.scheduler.capacity.root.streaming.capacity</name>
-        <value>70</value>
+        <value>85</value>
         <description>Streaming queue target capacity.</description>
     </property>
 
