@@ -12,7 +12,7 @@ vendor/
 spec/secrets.yml
 dataeng*
 kms_key_arn.tfvars
-
+.idea
 /root
 
 *.swp
