@@ -58,11 +58,11 @@ workflows:
     jobs:
       - dummy
 
-    - approvefirstTimeSetup:
-        type: approval
-        requires:
-          - dummy
-    - firstTimeSetup:
+      - approvefirstTimeSetup:
+          type: approval
+          requires:
+            - dummy
+      - firstTimeSetup:
         requires:
           - firstTimeSetup
 
