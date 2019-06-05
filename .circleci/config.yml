@@ -34,6 +34,15 @@ jobs:
                  ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply -input=false -auto-approve -var-file=prod-env.tfvars;
                  ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply -input=false -auto-approve;
 
+ buildAMIs:
+     <<: *defaults
+     steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+                 ./scripts/build_ami.sh training_kafka ;
+                 ./scripts/build_ami.sh training_ingester ;
+
  destroyProductionEnvironment:
      <<: *defaults
      steps:
@@ -61,6 +70,14 @@ workflows:
       - firstTimeSetup:
           requires:
             - approvefirstTimeSetup
+
+      - approvebuildAMIs:
+          type: approval
+          requires:
+            - dummy
+      - buildAMIs:
+          requires:
+            - buildAMIs
 
       - approveBuildProductionEnvironment:
           type: approval
