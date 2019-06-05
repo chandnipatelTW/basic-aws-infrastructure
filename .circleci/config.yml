@@ -77,7 +77,7 @@ workflows:
             - dummy
       - buildAMIs:
           requires:
-            - buildAMIs
+            - approvebuildAMIs
 
       - approveBuildProductionEnvironment:
           type: approval
