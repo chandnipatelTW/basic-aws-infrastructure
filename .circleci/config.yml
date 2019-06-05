@@ -64,7 +64,7 @@ workflows:
             - dummy
       - firstTimeSetup:
         requires:
-          - firstTimeSetup
+          - approvefirstTimeSetup
 
       - approveBuildProductionEnvironment:
           type: approval
