@@ -57,6 +57,7 @@ workflows:
   build:
     jobs:
       - dummy
+      - firstTimeSetup
 
       - approveBuildProductionEnvironment:
           type: approval
