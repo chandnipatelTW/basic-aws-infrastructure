@@ -27,13 +27,7 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "./scripts/install_oracle_jdk.sh",
-      "environment_vars" : [
-        "JAVA_VERSION_MAJOR={{user `java_version_major`}}",
-        "JAVA_VERSION_MINOR={{user `java_version_minor`}}",
-        "JAVA_VERSION_BUILD={{user `java_version_build`}}",
-        "JAVA_DOWNLOAD_PATH={{user `java_download_path`}}"
-      ]
+      "script": "scripts/install_amazon_corretto.sh"
     },
     {
       "type": "shell",
