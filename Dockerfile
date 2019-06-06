@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.9
 
 ENV TERRAFORM_SHA256SUM=84ccfb8e13b5fce63051294f787885b76a1fedef6bdbecf51c5e586c9e20c9b7
 ENV TERRAFORM_VERSION=0.11.8
@@ -31,6 +31,9 @@ RUN curl https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER
     && unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /usr/bin \
     && rm -f packer_${PACKER_VERSION}_linux_amd64.zipj \
     && rm -f terraform_${PACKER_VERSION}_SHA256SUMS
+
+# Install cfssl
+RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ cfssl
 
 # Install AWS and Okta tooling
 RUN pip install virtualenv
