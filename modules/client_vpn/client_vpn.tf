@@ -22,23 +22,21 @@ resource "aws_ec2_client_vpn_network_association" "client_vpn" {
 }
 
 resource "aws_security_group_rule" "client_vpn_ingress" {
-  security_group_id = "${element(aws_ec2_client_vpn_network_association.client_vpn.security_groups, count.index)}"
+  security_group_id = "${aws_ec2_client_vpn_network_association.client_vpn.security_groups}"
   from_port         = 0
   protocol          = "-1"
   to_port           = 0
   type              = "ingress"
-  count             = "${length(aws_ec2_client_vpn_network_association.client_vpn.security_groups)}"
   description       = "Unrestricted ingress for Client VPN"
   cidr_blocks       = ["${var.client_cidr_block}"]
 }
 
 resource "aws_security_group_rule" "client_vpn_egress" {
-  security_group_id = "${element(aws_ec2_client_vpn_network_association.client_vpn.security_groups, count.index)}"
+  security_group_id = "${aws_ec2_client_vpn_network_association.client_vpn.security_groups}"
   from_port         = 0
   protocol          = "-1"
   to_port           = 0
   type              = "egress"
-  count             = "${length(aws_ec2_client_vpn_network_association.client_vpn.security_groups)}"
   description       = "Unrestricted ingress for Client VPN"
   cidr_blocks       = ["${var.client_cidr_block}"]
 }
