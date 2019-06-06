@@ -10,15 +10,11 @@ variable "root_certificate_chain_arn" {
   description = "Chain of trust anchor"
 }
 
-variable "availability_zones" {
-  description = "The availability zones for which to add subnets."
-  type = "list"
-}
-
 variable "deployment_identifier" {
   description = "An identifier for this instantiation."
 }
 
 variable "subnet_ids" {
   description = "Subnet IDs to attach the VPN to"
+  type = "list"
 }
