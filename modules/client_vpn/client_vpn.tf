@@ -13,6 +13,13 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn" {
   connection_log_options {
     enabled = false
   }
+  tags = "${merge(
+    local.common_tags,
+    map(
+      "Name", "public-client-vpn-endpoint-${var.deployment_identifier}",
+      "Tier", "public"
+    )
+  )}"
 }
 
 resource "aws_ec2_client_vpn_network_association" "client_vpn" {
