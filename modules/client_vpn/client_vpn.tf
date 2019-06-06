@@ -1,8 +1,8 @@
 
 resource "aws_ec2_client_vpn_endpoint" "client_vpn" {
   description            = "terraform-clientvpn-example"
-  server_certificate_arn = "${server_cert_arn}"
-  client_cidr_block      = "${client_cidr_block}"
+  server_certificate_arn = "${var.server_cert_arn}"
+  client_cidr_block      = "${var.client_cidr_block}"
 
   authentication_options {
     type                       = "certificate-authentication"
