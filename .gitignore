@@ -18,3 +18,5 @@ kms_key_arn.tfvars
 *.swp
 .DS_Store
 okta_venv
+
+CA/certs/*
