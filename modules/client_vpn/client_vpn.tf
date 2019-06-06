@@ -28,7 +28,7 @@ resource "aws_security_group_rule" "client_vpn_ingress" {
   to_port           = 0
   type              = "ingress"
   description       = "Unrestricted ingress for Client VPN"
-  cidr_blocks       = ["${var.client_cidr_block}"]
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "client_vpn_egress" {
@@ -37,6 +37,6 @@ resource "aws_security_group_rule" "client_vpn_egress" {
   protocol          = "-1"
   to_port           = 0
   type              = "egress"
-  description       = "Unrestricted ingress for Client VPN"
+  description       = "Unrestricted egress for Client VPN"
   cidr_blocks       = ["${var.client_cidr_block}"]
 }
