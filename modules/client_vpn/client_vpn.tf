@@ -15,7 +15,7 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn" {
   tags = "${merge(
     local.common_tags,
     map(
-      "Name", "private-subnet-${element(var.availability_zones, count.index)}-${var.deployment_identifier}",
+      "Name", "client-vpn-${var.deployment_identifier}",
       "Tier", "private"
     )
   )}"
@@ -25,11 +25,10 @@ resource "aws_ec2_client_vpn_network_association" "client_vpn" {
   client_vpn_endpoint_id = "${aws_ec2_client_vpn_endpoint.client_vpn.id}"
   subnet_id              = "${element(var.subnet_ids, count.index)}"
   count                  = "${length(var.subnet_ids)}"
-
   tags = "${merge(
     local.common_tags,
     map(
-      "Name", "private-subnet-${element(var.availability_zones, count.index)}-${var.deployment_identifier}",
+      "Name", "client-vpn-subnet-${element(var.subnet_ids, count.index)}-${var.deployment_identifier}",
       "Tier", "private"
     )
   )}"
