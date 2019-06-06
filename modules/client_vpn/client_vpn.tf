@@ -6,7 +6,7 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn" {
 
   authentication_options {
     type                       = "certificate-authentication"
-    root_certificate_chain_arn = "${root_certificate_chain_arn}"
+    root_certificate_chain_arn = "${var.root_certificate_chain_arn}"
   }
 
   connection_log_options {
