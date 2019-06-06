@@ -18,3 +18,9 @@ variable "subnet_ids" {
   description = "Subnet IDs to attach the VPN to"
   type        = "list"
 }
+
+variable "dns_servers" {
+  description = "DNS server for the Client"
+  type        = "list"
+  default     = ["8.8.8.8", "8.8.4.4"]
+}
