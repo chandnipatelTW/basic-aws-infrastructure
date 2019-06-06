@@ -20,5 +20,5 @@ variable "ec2_key_pair" {
 
 variable "allowed_cidrs" {
   description = "CIDR blocks allowed to SSH into bastion"
-  type = "list"
+  type        = "list"
 }

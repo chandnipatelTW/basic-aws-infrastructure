@@ -1,16 +1,16 @@
 resource "aws_emr_cluster" "training_cluster" {
   name          = "${local.cluster_name}"
   release_label = "emr-5.15.0"
-  applications  = [
-    "Spark","Hue","Hive","Ganglia","Pig","Flink","Oozie","Zeppelin"
+  applications = [
+    "Spark", "Hue", "Hive", "Ganglia", "Pig", "Flink", "Oozie", "Zeppelin"
   ]
-  log_uri       = "s3://${aws_s3_bucket.emr_logs.id}/emr/"
+  log_uri = "s3://${aws_s3_bucket.emr_logs.id}/emr/"
 
   keep_job_flow_alive_when_no_steps = true
 
   step {
     action_on_failure = "TERMINATE_CLUSTER"
-    name   = "Setup Hadoop Debugging"
+    name              = "Setup Hadoop Debugging"
 
     hadoop_jar_step {
       jar  = "command-runner.jar"
@@ -38,14 +38,14 @@ resource "aws_emr_cluster" "training_cluster" {
   service_role = "${aws_iam_role.emr_service.arn}"
 
   instance_group {
-    instance_role = "MASTER"
-    instance_type = "${var.master_type}"
+    instance_role  = "MASTER"
+    instance_type  = "${var.master_type}"
     instance_count = "1"
   }
 
   instance_group {
-    instance_role = "CORE"
-    instance_type = "${var.core_type}"
+    instance_role  = "CORE"
+    instance_type  = "${var.core_type}"
     instance_count = "${var.core_count}"
     ebs_config {
       size = "500"

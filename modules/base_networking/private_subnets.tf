@@ -1,7 +1,7 @@
 resource "aws_subnet" "private" {
-  vpc_id = "${aws_vpc.vpc.id}"
-  count = "${length(var.availability_zones)}"
-  cidr_block = "${cidrsubnet(var.vpc_cidr, 8, count.index + length(var.availability_zones))}"
+  vpc_id            = "${aws_vpc.vpc.id}"
+  count             = "${length(var.availability_zones)}"
+  cidr_block        = "${cidrsubnet(var.vpc_cidr, 8, count.index + length(var.availability_zones))}"
   availability_zone = "${element(var.availability_zones, count.index)}"
 
   tags = "${merge(
@@ -26,13 +26,13 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route" "private_internet" {
-  route_table_id = "${aws_route_table.private.id}"
-  nat_gateway_id = "${aws_nat_gateway.nat_gateway.id}"
+  route_table_id         = "${aws_route_table.private.id}"
+  nat_gateway_id         = "${aws_nat_gateway.nat_gateway.id}"
   destination_cidr_block = "0.0.0.0/0"
 }
 
 resource "aws_route_table_association" "private" {
-  count = "${length(var.availability_zones)}"
-  subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
+  count          = "${length(var.availability_zones)}"
+  subnet_id      = "${element(aws_subnet.private.*.id, count.index)}"
   route_table_id = "${aws_route_table.private.id}"
 }

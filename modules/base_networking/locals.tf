@@ -1,6 +1,6 @@
 locals {
   common_tags = {
-    Automation = "terraform"
+    Automation           = "terraform"
     DeploymentIdentifier = "${var.deployment_identifier}"
   }
 }

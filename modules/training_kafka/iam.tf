@@ -2,15 +2,15 @@ data "aws_iam_policy_document" "kafka_assume_role" {
   statement {
     actions = ["sts:AssumeRole"]
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["ec2.amazonaws.com"]
     }
   }
 }
 
 resource "aws_iam_role" "kafka" {
-  name = "kafka-${var.deployment_identifier}"
-  description = "Role for Kafka"
+  name               = "kafka-${var.deployment_identifier}"
+  description        = "Role for Kafka"
   assume_role_policy = "${data.aws_iam_policy_document.kafka_assume_role.json}"
 }
 
@@ -32,9 +32,9 @@ data "aws_iam_policy_document" "kafka_cloudwatch" {
 }
 
 resource "aws_iam_policy" "kafka_cloudwatch" {
-  name = "kafka-emr-${var.deployment_identifier}"
+  name        = "kafka-emr-${var.deployment_identifier}"
   description = "Policy for kafka to push data to cloudwatch"
-  policy = "${data.aws_iam_policy_document.kafka_cloudwatch.json}"
+  policy      = "${data.aws_iam_policy_document.kafka_cloudwatch.json}"
 }
 
 resource "aws_iam_policy_attachment" "kafka_cloudwatch" {

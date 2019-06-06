@@ -1,5 +1,5 @@
 data "local_file" "ingester_dependencies" {
-    filename = "${path.module}/scripts/dependencies.sh"
+  filename = "${path.module}/scripts/dependencies.sh"
 }
 
 data "template_cloudinit_config" "ingester" {

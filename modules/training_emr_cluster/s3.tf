@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "emr_logs" {
   bucket = "${var.deployment_identifier}-emr-logs"
-  acl = "private"
+  acl    = "private"
 
   tags = "${merge(
     local.common_tags,

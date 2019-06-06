@@ -1,10 +1,10 @@
 resource "aws_db_instance" "airflow_postgres" {
   identifier = "training-airflow-${var.deployment_identifier}"
 
-  snapshot_identifier = "${var.initial_rds_snapshot}"
-  instance_class = "${var.rds_instance_class}"
+  snapshot_identifier    = "${var.initial_rds_snapshot}"
+  instance_class         = "${var.rds_instance_class}"
   vpc_security_group_ids = ["${aws_security_group.airflow_rds.id}"]
-  db_subnet_group_name = "${aws_db_subnet_group.airflow_postgres.name}"
+  db_subnet_group_name   = "${aws_db_subnet_group.airflow_postgres.name}"
   tags = "${merge(
     local.common_tags,
     map(

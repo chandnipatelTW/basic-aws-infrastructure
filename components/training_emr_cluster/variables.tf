@@ -9,8 +9,8 @@ variable "aws_region" {
 variable "emr_cluster" {
   type = "map"
   default = {
-    "master_type"  = "m1.medium"
-    "core_type" = "m1.medium"
-    "core_count" = "2"
+    "master_type" = "m1.medium"
+    "core_type"   = "m1.medium"
+    "core_count"  = "2"
   }
 }
