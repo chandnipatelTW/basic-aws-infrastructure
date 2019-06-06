@@ -66,6 +66,40 @@ Invoke `.scripts/create_tf_state_bucket.sh` to create a bucket for holding terra
 ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT
 ```
 
+## Creating Client VPN certs
+
+### Init the CA
+
+```bash
+cd CA
+./init.sh
+./server.sh openvpn
+```
+
+### Import certs to AWS
+
+_CA Root Cert_
+```bash
+aws acm import-certificate \
+    --certificate file://certs/ca.pem \
+    --private-key file://certs/ca-key.pem \
+    --region=${AWS_DEFAULT_REGION}
+```
+
+_Server Cert_
+```bash
+aws acm import-certificate \
+    --certificate file://certs/openvpn.pem \
+    --private-key file://certs/openvpn-key.pem \
+    --certificate-chain file://certs/ca.pem \
+    --region=${AWS_DEFAULT_REGION}
+```
+
+### Make a client cert
+```bash
+./client.sh macbook.bangalore-april-2019.training
+```
+
 ### Creating a EC2 keypair
 
 If we were to use terraform to manage ec2 ssh keypairs, there would be the risk that the
