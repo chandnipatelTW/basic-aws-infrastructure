@@ -20,5 +20,5 @@ output "dns_zone_id" {
 
 output "vpc_default_security_group_id" {
   description = "ID of the default SG for the VPC"
-  value = "${module.training_vpc.vpc_default_security_group_id}"
+  value       = "${module.training_vpc.vpc_default_security_group_id}"
 }
