@@ -35,6 +35,14 @@ jobs:
                  ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply -input=false -auto-approve;
                  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
 
+ buildClientVPN:
+     <<: *defaults
+     steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
+
  buildAMIs:
      <<: *defaults
      steps:
@@ -88,6 +96,15 @@ workflows:
       - buildProductionEnvironment:
           requires:
             - approveBuildProductionEnvironment
+
+      - approvebuildClientVPN:
+          type: approval
+          requires:
+            - dummy
+      - buildClientVPN:
+          requires:
+            - approvebuildClientVPN
+
 
       - approveDestroyProductionEnvironment:
           type: approval
