@@ -11,5 +11,5 @@ cat config/csr.json | sed -e s/%COMMONNAME%/$1/g | \
 cfssl gencert -ca certs/ca.pem -ca-key certs/ca-key.pem \
     -config=config/profiles.json \
     -profile="server" \
-    -hostname="$1" - |\
+    -hostname="$1".bangalore-april-2019.training - |\
     cfssljson -bare certs/$1
