@@ -19,7 +19,7 @@ data "terraform_remote_state" "base_networking" {
 
 module "client_vpn" {
   source                     = "../../modules/client_vpn"
-  subnet_ids                 = "${data.terraform_remote_state.base_networking.private_subnet_ids}"
+  subnet_ids                 = "${data.terraform_remote_state.base_networking.public_subnet_ids}"
   deployment_identifier      = "data-eng-${var.cohort}"
   client_cidr_block          = ""
   server_cert_arn            = ""

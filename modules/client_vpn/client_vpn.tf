@@ -16,7 +16,7 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn" {
     local.common_tags,
     map(
       "Name", "client-vpn-${var.deployment_identifier}",
-      "Tier", "private"
+      "Tier", "public"
     )
   )}"
 }
@@ -29,7 +29,7 @@ resource "aws_ec2_client_vpn_network_association" "client_vpn" {
     local.common_tags,
     map(
       "Name", "client-vpn-subnet-${element(var.subnet_ids, count.index)}-${var.deployment_identifier}",
-      "Tier", "private"
+      "Tier", "public"
     )
   )}"
 }
