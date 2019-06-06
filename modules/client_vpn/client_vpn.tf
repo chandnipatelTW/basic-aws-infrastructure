@@ -22,7 +22,7 @@ resource "aws_ec2_client_vpn_network_association" "client_vpn" {
 }
 
 resource "aws_security_group_rule" "client_vpn_ingress" {
-  security_group_id = "${aws_ec2_client_vpn_network_association.client_vpn.security_groups}"
+  security_group_id = "${aws_ec2_client_vpn_network_association.client_vpn.0.security_groups}"
   from_port         = 0
   protocol          = "-1"
   to_port           = 0
@@ -32,7 +32,7 @@ resource "aws_security_group_rule" "client_vpn_ingress" {
 }
 
 resource "aws_security_group_rule" "client_vpn_egress" {
-  security_group_id = "${aws_ec2_client_vpn_network_association.client_vpn.security_groups}"
+  security_group_id = "${aws_ec2_client_vpn_network_association.client_vpn.0.security_groups}"
   from_port         = 0
   protocol          = "-1"
   to_port           = 0
