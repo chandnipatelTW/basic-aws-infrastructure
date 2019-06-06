@@ -10,7 +10,7 @@ resource "aws_ec2_client_vpn_endpoint" "client_vpn" {
   }
 
   connection_log_options {
-    enabled               = false
+    enabled = false
   }
   tags = "${merge(
     local.common_tags,

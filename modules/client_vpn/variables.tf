@@ -16,5 +16,5 @@ variable "deployment_identifier" {
 
 variable "subnet_ids" {
   description = "Subnet IDs to attach the VPN to"
-  type = "list"
+  type        = "list"
 }
