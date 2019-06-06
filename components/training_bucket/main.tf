@@ -4,7 +4,8 @@ terraform {
 
 provider "aws" {
   region  = "${var.aws_region}"
-  version = "~> 2.0"}
+  version = "~> 2.0"
+}
 
 locals {
   deployment_identifier = "data-eng-${var.cohort}"
