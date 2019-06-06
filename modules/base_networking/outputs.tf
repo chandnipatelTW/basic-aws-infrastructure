@@ -8,11 +8,6 @@ output "vpc_cidr" {
   value       = "${aws_vpc.vpc.cidr_block}"
 }
 
-output "vpc_default_security_group_id" {
-  description = "The CIDR of the created VPC."
-  value       = "${aws_vpc.vpc.default_security_group_id}"
-}
-
 output "availability_zones" {
   description = "The availability zones in which subnets were created."
   value       = "${var.availability_zones}"
