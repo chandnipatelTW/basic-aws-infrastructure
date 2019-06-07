@@ -86,6 +86,9 @@ aws acm import-certificate \
     --region=${AWS_DEFAULT_REGION}
 ```
 
+Take the ARN returned from this above command and put it in 
+components > client_vpn > main.tf
+
 _Server Cert_
 ```bash
 aws acm import-certificate \
@@ -95,10 +98,24 @@ aws acm import-certificate \
     --region=${AWS_DEFAULT_REGION}
 ```
 
+Take the ARN returned from this above command and put it in 
+components > client_vpn > main.tf
+
 ### Make a client cert
 ```bash
-./client.sh macbook.bangalore-april-2019.training
+./client.sh cpatel.bangalore-april-2019.training
 ```
+
+
+
+
+
+
+
+
+
+
+
 
 ### Creating a EC2 keypair
 

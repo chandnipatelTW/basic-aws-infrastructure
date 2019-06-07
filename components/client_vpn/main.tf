@@ -22,6 +22,6 @@ module "client_vpn" {
   security_group_id          = "${data.terraform_remote_state.base_networking.vpc_default_security_group_id}"
   deployment_identifier      = "data-eng-${var.cohort}"
   client_cidr_block          = "10.10.0.0/16"
-  server_cert_arn            = "arn:aws:acm:ap-southeast-1:618886044591:certificate/a9defefc-876f-4f31-9935-4968424f1015"
-  root_certificate_chain_arn = "arn:aws:acm:ap-southeast-1:618886044591:certificate/23ed1a5c-53cf-4c54-aafa-aea6dd1e9301"
+  server_cert_arn            = "arn:aws:acm:ap-southeast-1:618886044591:certificate/b78d65b0-1fe0-49c0-9e29-2c7c74a750f5"
+  root_certificate_chain_arn = "arn:aws:acm:ap-southeast-1:618886044591:certificate/9627ceb2-8c63-439e-b26e-3e42d50db014"
 }
