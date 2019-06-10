@@ -20,4 +20,4 @@ echo "Making CA certificate for ${CN}"
 
 sed -e s/%COMMONNAME%/${CN}/g < config/ca.json | \
     cfssl genkey --initca - | \
-    cfssljson -bare certs/ca
+    cfssljson -bare certs/${TRAINING_COHORT}-root
