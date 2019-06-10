@@ -2,14 +2,6 @@ variable "client_cidr_block" {
   description = "The CIDR to use for the clients"
 }
 
-variable "server_cert_arn" {
-  description = "The ARN for the VPN server cert"
-}
-
-variable "root_certificate_chain_arn" {
-  description = "Chain of trust anchor"
-}
-
 variable "deployment_identifier" {
   description = "An identifier for this instantiation."
 }
@@ -27,4 +19,8 @@ variable "dns_servers" {
 
 variable "security_group_id" {
   description = "Security group for the VPN connection"
+}
+
+variable "cohort" {
+  description = "Training cohort, eg: london-summer-2018"
 }
