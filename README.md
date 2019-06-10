@@ -88,6 +88,13 @@ cd CA
 
 This will generate 2 files: `certs/cpatel.${TRAINING_COHORT}.training.pem` and `certs/cpatel.${TRAINING_COHORT}.training-key.pem`
 
+### Create a client config file
+```bash
+./manage.sh client_config clientname
+```
+
+This will generate a file: `certs/cpatel.${TRAINING_COHORT}.training.ovpn`
+
 ### Creating a EC2 keypair
 
 If we were to use terraform to manage ec2 ssh keypairs, there would be the risk that the

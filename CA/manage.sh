@@ -64,6 +64,32 @@ client_cert ()
         cfssljson -bare certs/${CN}
 }
 
+output_client_config ()
+{
+    ensure_ca_init
+    CN=${1}.${TRAINING_COHORT}.training
+    : ${AWS_DEFAULT_REGION:?"Variable is required."}
+    : ${ENDPOINT:?"Variable is required, this is the AWS id of the client VPN endpoint, eg 1234567890 ."}
+    CA=$(cat certs/${TRAINING_COHORT}-root.pem)
+    CERT=$(cat certs/${CN}.pem)
+    KEY=$(cat certs/${CN}-key.pem)
+
+    sed -e s/%ENDPOINT%/${ENDPOINT}/g \
+        -e s/%REGION%/${AWS_DEFAULT_REGION}/g \
+        < config/downloaded-client-config.ovpn > certs/${CN}.ovpn
+    cat << EOF >> certs/${CN}.ovpn
+<ca>
+${CA}
+</ca>
+<cert>
+${CERT}
+</cert>
+<key>
+${KEY}
+</key>
+EOF
+}
+
 aws_import ()
 {
     ensure_ca_init
@@ -94,8 +120,9 @@ case ${CMD} in
     init) init_ca ;;
     server) server_cert ;;
     client) client_cert ${2} ;;
-    usage) usage ;;
     upload) aws_import ;;
+    client_config) output_client_config ${2} ;;
+    *) usage ;;
 esac
 
 
