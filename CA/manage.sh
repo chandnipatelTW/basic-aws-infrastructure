@@ -12,12 +12,13 @@ ensure_basic_setup ()
         echo "Making certs directory"
         mkdir -p certs
     fi
+    : ${TRAINING_COHORT:?"Variable is required."}
 }
 
 ensure_ca_init ()
 {
     ensure_basic_setup
-    if [[ -f certs/${TRAINING_COHORT}-root.pem ]] ; then
+    if [[ ! -f certs/${TRAINING_COHORT}-root.pem ]] ; then
         echo No CA root found, please run $0 init
         exit 1
     fi
@@ -52,6 +53,7 @@ server_cert ()
 aws_import ()
 {
     ensure_ca_init
+    : ${AWS_DEFAULT_REGION:?"Variable is required."}
     aws acm import-certificate \
         --certificate file://certs/${TRAINING_COHORT}-root.pem \
         --private-key file://certs/${TRAINING_COHORT}-root-key.pem \
