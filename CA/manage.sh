@@ -17,7 +17,6 @@ ensure_basic_setup ()
 
 ensure_ca_init ()
 {
-    ensure_basic_setup
     if [[ ! -f certs/${TRAINING_COHORT}-root.pem ]] ; then
         echo No CA root found, please run $0 init
         exit 1
@@ -50,21 +49,6 @@ server_cert ()
      cfssljson -bare certs/${CN}
 }
 
-aws_import ()
-{
-    ensure_ca_init
-    : ${AWS_DEFAULT_REGION:?"Variable is required."}
-    aws acm import-certificate \
-        --certificate file://certs/${TRAINING_COHORT}-root.pem \
-        --private-key file://certs/${TRAINING_COHORT}-root-key.pem \
-        --region=${AWS_DEFAULT_REGION}
-    aws acm import-certificate \
-        --certificate file://certs/openvpn.${TRAINING_COHORT}.training.pem \
-        --private-key file://certs/openvpn.${TRAINING_COHORT}.training-key.pem \
-        --certificate-chain file://certs/${TRAINING_COHORT}-root.pem \
-        --region=${AWS_DEFAULT_REGION}
-}
-
 client_cert ()
 {
     ensure_ca_init
@@ -80,12 +64,27 @@ client_cert ()
         cfssljson -bare certs/${CN}
 }
 
+aws_import ()
+{
+    ensure_ca_init
+    : ${AWS_DEFAULT_REGION:?"Variable is required."}
+    aws acm import-certificate \
+        --certificate file://certs/${TRAINING_COHORT}-root.pem \
+        --private-key file://certs/${TRAINING_COHORT}-root-key.pem \
+        --region=${AWS_DEFAULT_REGION}
+    aws acm import-certificate \
+        --certificate file://certs/openvpn.${TRAINING_COHORT}.training.pem \
+        --private-key file://certs/openvpn.${TRAINING_COHORT}.training-key.pem \
+        --certificate-chain file://certs/${TRAINING_COHORT}-root.pem \
+        --region=${AWS_DEFAULT_REGION}
+}
+
 usage ()
 {
-    echo "init - create a new CA"
+    echo "init   - create a new CA"
     echo "server - create AWS client VPN server certs"
     echo "client <client name> - create a client connection cert"
-    echo "upload - Upload the CA and server certs to AWS"
+    echo "upload - upload the CA and server certs to AWS"
     exit 1
 }
 
