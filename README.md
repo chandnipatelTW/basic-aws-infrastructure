@@ -72,7 +72,7 @@ Invoke `.scripts/create_tf_state_bucket.sh` to create a bucket for holding terra
 
 ```bash
 cd CA
-./init.sh && ./server.sh
+./manage.sh init && ./manage.sh server
 ```
 
 ### Import certs to AWS
@@ -83,7 +83,7 @@ cd CA
 
 ### Make a client cert
 ```bash
-./client.sh cpatel
+./manage.sh client cpatel
 ```
 
 This will generate 2 files: `certs/cpatel.${TRAINING_COHORT}.training.pem` and `certs/cpatel.${TRAINING_COHORT}.training-key.pem`
