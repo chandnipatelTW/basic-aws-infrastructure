@@ -78,7 +78,7 @@ cd CA
 ### Import certs to AWS
 
 ```bash
-./aws-upload.sh
+./manage.sh upload
 ```
 
 ### Make a client cert
