@@ -72,50 +72,21 @@ Invoke `.scripts/create_tf_state_bucket.sh` to create a bucket for holding terra
 
 ```bash
 cd CA
-./init.sh
-./server.sh openvpn
+./init.sh && ./server.sh
 ```
 
 ### Import certs to AWS
 
-_CA Root Cert_
 ```bash
-aws acm import-certificate \
-    --certificate file://certs/ca.pem \
-    --private-key file://certs/ca-key.pem \
-    --region=${AWS_DEFAULT_REGION}
+./aws-upload.sh
 ```
-
-Take the ARN returned from this above command and put it in 
-components > client_vpn > main.tf
-
-_Server Cert_
-```bash
-aws acm import-certificate \
-    --certificate file://certs/openvpn.pem \
-    --private-key file://certs/openvpn-key.pem \
-    --certificate-chain file://certs/ca.pem \
-    --region=${AWS_DEFAULT_REGION}
-```
-
-Take the ARN returned from this above command and put it in 
-components > client_vpn > main.tf
 
 ### Make a client cert
 ```bash
-./client.sh cpatel.bangalore-april-2019.training
+./client.sh cpatel
 ```
 
-
-
-
-
-
-
-
-
-
-
+This will generate 2 files: `certs/cpatel.${TRAINING_COHORT}.training.pem` and `certs/cpatel.${TRAINING_COHORT}.training-key.pem`
 
 ### Creating a EC2 keypair
 
