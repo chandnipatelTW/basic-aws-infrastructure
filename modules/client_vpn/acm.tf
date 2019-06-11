@@ -1,5 +1,5 @@
 data "aws_acm_certificate" "root" {
-  domain      = "root.${var.cohort}.training"
+  domain      = "${var.cohort}.training"
   types       = ["IMPORTED"]
   most_recent = true
 }
