@@ -105,7 +105,6 @@ workflows:
           requires:
             - approvebuildClientVPN
 
-
       - approveDestroyProductionEnvironment:
           type: approval
           requires:
