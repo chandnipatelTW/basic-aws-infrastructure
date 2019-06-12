@@ -73,7 +73,7 @@ output_client_config ()
     CA=$(cat certs/${TRAINING_COHORT}-root.pem)
     CERT=$(cat certs/${CN}.pem)
     KEY=$(cat certs/${CN}-key.pem)
-
+    # aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id endpoint_id --output text>config_filename.ovpn
     sed -e s/%ENDPOINT%/${ENDPOINT}/g \
         -e s/%REGION%/${AWS_DEFAULT_REGION}/g \
         < config/downloaded-client-config.ovpn > certs/${CN}.ovpn
