@@ -69,18 +69,15 @@ output_client_config ()
     ensure_ca_init
     CN=${1}.${TRAINING_COHORT}.training
     : ${AWS_DEFAULT_REGION:?"Variable is required."}
-    : ${ENDPOINT:?"Variable is required, this is the AWS id of the client VPN endpoint, eg 1234567890 ."}
+    : ${ENDPOINT:?"Variable is required, this is the AWS id of the client VPN endpoint, eg cvpn-endpoint-09105dfced0d9f596 ."}
     CA=$(cat certs/${TRAINING_COHORT}-root.pem)
     CERT=$(cat certs/${CN}.pem)
     KEY=$(cat certs/${CN}-key.pem)
-    # aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id endpoint_id --output text>config_filename.ovpn
+    aws ec2 export-client-vpn-client-configuration --client-vpn-endpoint-id $ENDPOINT --output text>config/$ENDPOINT.ovpn
     sed -e s/%ENDPOINT%/${ENDPOINT}/g \
         -e s/%REGION%/${AWS_DEFAULT_REGION}/g \
-        < config/downloaded-client-config.ovpn > certs/${CN}.ovpn
+        < config/$ENDPOINT.ovpn > certs/${CN}.ovpn
     cat << EOF >> certs/${CN}.ovpn
-<ca>
-${CA}
-</ca>
 <cert>
 ${CERT}
 </cert>
@@ -88,6 +85,8 @@ ${CERT}
 ${KEY}
 </key>
 EOF
+    rm config/$ENDPOINT.ovpn
+    echo "Success! openvpn config file created at certs/${CN}.ovpn"
 }
 
 aws_import ()
@@ -111,6 +110,7 @@ usage ()
     echo "server - create AWS client VPN server certs"
     echo "client <client name> - create a client connection cert"
     echo "upload - upload the CA and server certs to AWS"
+    echo "client_config <client name> - export openvpn config file"
     exit 1
 }
 
