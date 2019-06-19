@@ -66,34 +66,23 @@ Invoke `.scripts/create_tf_state_bucket.sh` to create a bucket for holding terra
 ./scripts/create_tf_state_bucket.sh $TRAINING_COHORT
 ```
 
-## Creating Client VPN certs
+### Creating VPN certs
 
-### Init the CA
+#### Init the CA
 
 ```bash
 cd CA
 ./manage.sh init && ./manage.sh server
 ```
 
-### Import certs to AWS
+This will generate Root and Server cert that then will be uploaded to AWS and later will be used to generate client certs to connect to the VPN.
+
+
+#### Import certs to AWS
 
 ```bash
 ./manage.sh upload
 ```
-
-### Make a client cert
-```bash
-./manage.sh client cpatel
-```
-
-This will generate 2 files: `certs/cpatel.${TRAINING_COHORT}.training.pem` and `certs/cpatel.${TRAINING_COHORT}.training-key.pem`
-
-### Create a client config file
-```bash
-./manage.sh client_config clientname
-```
-
-This will generate a file: `certs/cpatel.${TRAINING_COHORT}.training.ovpn`
 
 ### Creating a EC2 keypair
 
@@ -151,19 +140,59 @@ desired AWS region.
 ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply
 ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply
 ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply
+./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply
 ```
 
 ## 4) Connecting to the environment
 
+### Preparing AWS Client VPN 
+
+Currently is not possible to automate some VPN configs with Terraform, so for now you need to do it manually.
+
+Go to AWS Management Console > VPC > Client VPN and select the VPN Endpoint that Terraform just created
+
+#### Configure Security Groups:
+
+With the Client VPN Endpoint Selected, go to Security Groups Tab, choose the only VPC and press Apply Security Groups.
+
+Select the security groups that the VPN needs to access to EMR, Kafka, Ingester, Airflow. And press "Apply Security Groups"
+
+#### Add user Authorization Ingress:
+
+With the Client VPN Endpoint Selected, go to Authorization Tab, choose the only VPC and press Authorize Ingress
+
+Add `0.0.0.0/0` as Destination network to enable  and Allow access to all users. Press "Add Authorization Rule".
+
+#### Add route table to client vpn with publics subnets:
+
+With the Client VPN Endpoint Selected, go to Authorization Tab.
+
+Press Create Route.
+
+`0.0.0.0/0` as Route destination, then select one of the public subnets. And press "Create Route"
+
+Repeat for the other two public subnets.
+
 ### Using VPN
 
-#### Create a client config file
-With the same CA that created the root cert and server cert you need to create client certs.
+#### Make a client certs
 
-Export the ENDPOINT hash that is in AWS > VPC Dashboard > Virtual Private Network (VPN) > Client VPN Endpoints.
+With the same CA that created the root, server and client certs you need to create client certs
+
+```bash
+cd CA
+./manage.sh client cpatel
+```
+
+This will generate 2 files: `certs/cpatel.${TRAINING_COHORT}.training.pem` and `certs/cpatel.${TRAINING_COHORT}.training-key.pem`
+
+#### Create a client config file
+With the root, server and client certs you will generate now openvpn config files (one for each client).
+
+Export a variable with the *Client VPN EndpointID* that you'll get as a result of clien_vpn component creation in Terraform. Also you can find it in AWS > VPC Dashboard > Virtual Private Network (VPN) > Client VPN Endpoints. eg: cvpn-endpoint-0d4b52bbe4393d9f1
 
 ```
-export ENDPOINT=8934lVljE2ijfl2k
+export ENDPOINT=YourEndpointID
 ```
 
 Next run this script to get the VPN client config file.
@@ -172,11 +201,10 @@ Next run this script to get the VPN client config file.
 ./manage.sh client_config clientname
 ```
 
-This will generate a file like: `certs/cpatel.${TRAINING_COHORT}.training.ovpn`
+This will generate a file like: `certs/clientname.${TRAINING_COHORT}.training.ovpn`
 
 
-Download TunnelBlick and import the *.ovpn file there.  
-Click connect :D
+Download [Viscosity VPN Client](https://www.sparklabs.com/viscosity/) and import the *.ovpn file there. Click connect :D
 
 
 ### Obtaining SSH private key
@@ -201,27 +229,21 @@ Generate ssh config:
 ./scripts/generate_ssh_config.sh $TRAINING_COHORT
 ```
 
-The following SSH commands should now work:
+### All set!
 
-- `ssh bastion.$TRAINING_COHORT.training`
-- `ssh emr-master.$TRAINING_COHORT.training`
+When connected to the VPN, the following SSH commands should work:
 
-### Configure proxy to access web user interaces
+- `ssh -i ~/.ssh/tw-dataeng-$TRAINING_COHORT hadoop@emr-master.$TRAINING_COHORT.training`
+- `ssh -i ~/.ssh/tw-dataeng-$TRAINING_COHORT ec2-user@kafka.$TRAINING_COHORT.training`
 
-Run `ssh bastion.chicago-fall-2018.training` and leave the connection running.
-This will create a SOCKS proxy running on localhost 6789
-
-In Firefox you should now be able to configure proxy settings for `*.chicago-fall-2018.training` and `*.compute.internal` to use this. SwitchyOmega is a good extension for Chrome.
-Ensure that the proxy DNS option is enabled.
-
-Then you should be able to see the following resources:
+Also, you should be able to see the following resources:
 
 | Resource | Link |
 | -------- | ---- |
-|YARN ResourceManager |	http://emr-master.chicago-fall-2018.training:8088/ |
-|Hadoop HDFS NameNode |	http://emr-master.chicago-fall-2018.training:50070/ |
-|Spark HistoryServer	| http://emr-master.chicago-fall-2018.training:18080/ |
-|Zeppelin	| http://emr-master.chicago-fall-2018.training:8890/ |
-|Hue	| http://emr-master.chicago-fall-2018.training:8888/ |
-|Ganglia | http://emr-master.chicago-fall-2018.training/ganglia/ |
+|YARN ResourceManager |	http://emr-master.$TRAINING_COHORT.training:8088/ |
+|Hadoop HDFS NameNode |	http://emr-master.$TRAINING_COHORT.training:50070/ |
+|Spark HistoryServer	| http://emr-master.$TRAINING_COHORT.training:18080/ |
+|Zeppelin	| http://emr-master.$TRAINING_COHORT.training:8890/ |
+|Hue	| http://emr-master.$TRAINING_COHORT.training:8888/ |
+|Ganglia | http://emr-master.$TRAINING_COHORT.training/ganglia/ |
 
