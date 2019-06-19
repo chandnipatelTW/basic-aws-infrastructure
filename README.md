@@ -155,6 +155,30 @@ desired AWS region.
 
 ## 4) Connecting to the environment
 
+### Using VPN
+
+#### Create a client config file
+With the same CA that created the root cert and server cert you need to create client certs.
+
+Export the ENDPOINT hash that is in AWS > VPC Dashboard > Virtual Private Network (VPN) > Client VPN Endpoints.
+
+```
+export ENDPOINT=8934lVljE2ijfl2k
+```
+
+Next run this script to get the VPN client config file.
+
+```bash
+./manage.sh client_config clientname
+```
+
+This will generate a file like: `certs/cpatel.${TRAINING_COHORT}.training.ovpn`
+
+
+Download TunnelBlick and import the *.ovpn file there.  
+Click connect :D
+
+
 ### Obtaining SSH private key
 
 Confirm that you have a .ssh folder in your user (~) directory. Or you can just run the command to create the directory as required:
