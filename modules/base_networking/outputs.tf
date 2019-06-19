@@ -62,3 +62,8 @@ output "dns_zone_id" {
   description = "ID of the private DNS zone attached to the VPC."
   value       = "${aws_route53_zone.private_zone.zone_id}"
 }
+
+output "resolver_inbound_dns_ips" {
+  description = "IP for DNS inbound resolver"
+  value       = "${aws_route53_resolver_endpoint.resolver_indbound_endpoint.ip_address}"
+}

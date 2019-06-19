@@ -22,3 +22,13 @@ output "vpc_default_security_group_id" {
   description = "ID of the default SG for the VPC"
   value       = "${module.training_vpc.vpc_default_security_group_id}"
 }
+
+output "resolver_inbound_dns_ips" {
+  description = "Inbound resolvers DNS IPs"
+  value       = "${list(
+                    lookup(module.training_vpc.resolver_inbound_dns_ips[0],"ip"),
+                    lookup(module.training_vpc.resolver_inbound_dns_ips[1],"ip"),
+                    lookup(module.training_vpc.resolver_inbound_dns_ips[2],"ip")
+                    )
+                  }"
+}
