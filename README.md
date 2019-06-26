@@ -68,7 +68,7 @@ Invoke `.scripts/create_tf_state_bucket.sh` to create a bucket for holding terra
 
 ### Creating VPN certs
 
-#### Init the CA
+#### Init the CA 
 
 ```bash
 cd CA
