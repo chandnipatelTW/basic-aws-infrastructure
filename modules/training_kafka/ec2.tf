@@ -13,3 +13,15 @@ resource "aws_instance" "kafka" {
     )
   )}"
 }
+
+resource "aws_ebs_volume" "kafka" {
+  count             = "${length(var.availability_zones)}"
+  availability_zone = "${element(var.availability_zones, count.index)}"
+  size              = 110
+}
+
+resource "aws_volume_attachment" "ebs_att" {
+  device_name = "/dev/xvda"
+  volume_id   = "${aws_ebs_volume.kafka.id}"
+  instance_id = "${aws_instance.kafka.id}"
+}

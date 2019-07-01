@@ -12,3 +12,8 @@ output "kafka_instance_id" {
   description = "The instance id."
   value       = "${aws_instance.kafka.id}"
 }
+
+output "availability_zones" {
+  description = "The availability zones in which subnets were created."
+  value       = "${var.availability_zones}"
+}
