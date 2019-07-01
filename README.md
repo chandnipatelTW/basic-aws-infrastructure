@@ -142,20 +142,31 @@ desired AWS region.
 ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply
 ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply
 ```
+If you'd like to increase the size of the machines, you can create a flag for environment variables after apply as such
+`-var-file=uat-env.tfvars;`
 
+In which the uat-env.tfvars looks like:
+```
+emr_cluster = {
+  master_type = "m4.xlarge"
+  core_type   = "m1.medium"
+  core_count  = "2"
+}
+
+```
 ## 4) Connecting to the environment
 
 ### Preparing AWS Client VPN 
 
 Currently is not possible to automate some VPN configs with Terraform, so for now you need to do it manually.
 
-Go to AWS Management Console > VPC > Client VPN and select the VPN Endpoint that Terraform just created
+Go to AWS Management Console > VPC > Client VPN Endpoints and select the VPN Endpoint that Terraform just created
 
 #### Configure Security Groups:
 
 With the Client VPN Endpoint Selected, go to Security Groups Tab, choose the only VPC and press Apply Security Groups.
 
-Select the security groups that the VPN needs to access to EMR, Kafka, Ingester, Airflow. And press "Apply Security Groups"
+Select the security groups that the VPN needs to access to EMR Master, Kafka, Ingester, Airflow, and Bastion. And press "Apply Security Groups"
 
 #### Add user Authorization Ingress:
 
@@ -165,7 +176,7 @@ Add `0.0.0.0/0` as Destination network to enable  and Allow access to all users.
 
 #### Add route table to client vpn with publics subnets:
 
-With the Client VPN Endpoint Selected, go to Authorization Tab.
+With the Client VPN Endpoint Selected, go to Route Table Tab.
 
 Press Create Route.
 
