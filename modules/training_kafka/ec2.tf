@@ -21,7 +21,8 @@ resource "aws_ebs_volume" "kafka" {
 }
 
 resource "aws_volume_attachment" "ebs_att" {
+  count       = "${length(var.availability_zones)}"
   device_name = "/dev/xvda"
-  volume_id   = "${aws_ebs_volume.kafka.id}"
+  volume_id   = "${element(aws_ebs_volume.kafka.*.id, count.index)}"
   instance_id = "${aws_instance.kafka.id}"
 }
