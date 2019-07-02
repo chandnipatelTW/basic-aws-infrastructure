@@ -67,7 +67,8 @@ resource "aws_emr_cluster" "training_cluster" {
         "yarn.scheduler.capacity.root.queues": "default,streaming,monitoring",
         "yarn.scheduler.capacity.root.default.capacity": "25",
         "yarn.scheduler.capacity.root.streaming.capacity": "70",
-        "yarn.scheduler.capacity.root.monitoring.capacity": "5"
+        "yarn.scheduler.capacity.root.monitoring.capacity": "5",
+        "yarn.scheduler.capacity.maximum-am-resource-percent": "0.8"
     }
     },
   {
