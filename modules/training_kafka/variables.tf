@@ -29,8 +29,3 @@ variable "bastion_security_group_id" {
 variable "emr_security_group_id" {
   description = "Id of EMR cluster security group to Kafka & Zookeeper ingress"
 }
-
-variable "availability_zones" {
-  description = "The availability zones for which to add subnets."
-  type        = "list"
-}

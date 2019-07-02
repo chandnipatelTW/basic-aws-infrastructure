@@ -12,15 +12,10 @@ resource "aws_instance" "kafka" {
       "Name", "kafka-${var.deployment_identifier}"
     )
   )}"
-}
 
-resource "aws_ebs_volume" "kafka" {
-  availability_zone = "${element(var.availability_zones, 0)}"
-  size              = 110
-}
-
-resource "aws_volume_attachment" "ebs_att" {
-  device_name = "/dev/xvda"
-  volume_id   = "${aws_ebs_volume.kafka.id}"
-  instance_id = "${aws_instance.kafka.id}"
+  root_block_device {
+    volume_type           = "gp2"
+    volume_size           = "110"
+    delete_on_termination = "true"
+  }
 }

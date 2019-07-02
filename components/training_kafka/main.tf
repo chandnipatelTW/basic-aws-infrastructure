@@ -45,5 +45,4 @@ module "training_kafka" {
   ec2_key_pair              = "tw-dataeng-${var.cohort}"
   dns_zone_id               = "${data.terraform_remote_state.base_networking.dns_zone_id}"
   instance_type             = "${var.kafka["instance_type"]}"
-  availability_zones        = ["${var.aws_region}a"]
 }
