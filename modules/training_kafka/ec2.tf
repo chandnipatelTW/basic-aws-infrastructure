@@ -20,7 +20,7 @@ resource "aws_instance" "kafka" {
     set -e
 
     device_name="${var.data_device_name}"
-    dir_path="/data"
+    dir_path="${var.data_dir}"
     owner="cp-kafka"
     owner_group="confluent"
     kafka_data_dir="$${dir_path}/kafka"
@@ -79,4 +79,9 @@ resource "aws_volume_attachment" "kafka" {
   device_name = "${var.data_device_name}"
   volume_id   = "${aws_ebs_volume.kafka.id}"
   instance_id = "${aws_instance.kafka.id}"
+
+  provisioner "remote-exec" {
+    when   = "destroy"
+    inline = ["umount ${var.data_dir}"]
+  }
 }

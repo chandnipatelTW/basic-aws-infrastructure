@@ -44,6 +44,11 @@ variable "data_device_name" {
   default = "/dev/sdf"
 }
 
+variable "data_dir" {
+  description = "Name of the directory where Kafka and Zookeeper data resides"
+  default = "/data"
+}
+
 variable "aws_region" {
   description = "Region in which to build resources."
 }
