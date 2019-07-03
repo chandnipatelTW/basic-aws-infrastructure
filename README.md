@@ -140,6 +140,8 @@ desired AWS region.
 ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply
 ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply
 ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply
+./scripts/run_terraform.sh $TRAINING_COHORT monitoring_alarms apply
+./scripts/run_terraform.sh $TRAINING_COHORT monitoring_rules apply
 ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply
 ```
 If you'd like to increase the size of the machines, you can create a flag for environment variables after apply as such
