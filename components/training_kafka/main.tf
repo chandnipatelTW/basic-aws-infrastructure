@@ -46,4 +46,5 @@ module "training_kafka" {
   dns_zone_id               = "${data.terraform_remote_state.base_networking.dns_zone_id}"
   instance_type             = "${var.kafka["instance_type"]}"
   data_volume_size          = "${var.kafka["data_volume_size"]}"
+  aws_region                = "${var.aws_region}"
 }

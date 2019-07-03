@@ -44,4 +44,8 @@ variable "data_device_name" {
   default = "/dev/sdf"
 }
 
+variable "aws_region" {
+  description = "Region in which to build resources."
+}
+
 
