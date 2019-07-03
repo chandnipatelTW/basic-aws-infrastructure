@@ -21,19 +21,19 @@ resource "aws_instance" "kafka" {
     set -e
 
     device_name="${var.data_device_name}"
-    data_dir="${var.data_dir}"
+    dir_path="${var.data_dir}"
     owner="cp-kafka"
     owner_group="confluent"
-    kafka_data_dir="$${data_dir}/kafka"
-    zookeeper_data_dir="$${data_dir}/zookeeper"
+    kafka_data_dir="$${dir_path}/kafka"
+    zookeeper_data_dir="$${dir_path}/zookeeper"
 
     mkfs -t xfs $${device_name}
 
-    mkdir $${data_dir}
+    mkdir $${dir_path}
 
     cp /etc/fstab /etc/fstab.orig
 
-    echo "UUID=$(blkid $${device_name} -o value | head -n 1)  $${data_dir}  xfs  defaults,nofail  0  2" | tee -a /etc/fstab
+    echo "UUID=$(blkid $${device_name} -o value | head -n 1)  $${dir_path}  xfs  defaults,nofail  0  2" | tee -a /etc/fstab
 
     mount -a
 
@@ -45,10 +45,10 @@ resource "aws_instance" "kafka" {
       mv /etc/fstab.orig /etc/fstab
     fi
 
+    chown $${owner}:$${owner_group} $${dir_path}
+
     mkdir -p "$${kafka_data_dir}"
     mkdir -p "$${zookeeper_data_dir}"
-
-    chown --recursive $${owner}:$${owner_group} $${data_dir}
 
     replace_property_value /etc/kafka/server.properties "log.dirs" "$${kafka_data_dir}"
     replace_property_value /etc/kafka/zookeeper.properties "dataDir" "$${zookeeper_data_dir}"
