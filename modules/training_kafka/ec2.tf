@@ -64,19 +64,19 @@ resource "aws_instance" "kafka" {
 
 resource "aws_ebs_volume" "kafka" {
   availability_zone = "${var.aws_region}a"
-  size              = var.data_volume_size
-  type              = var.data_volume_type
+  size              = "${var.data_volume_size}"
+  type              = "${var.data_volume_type}"
 
-  tags = merge(
+  tags = "${merge(
     local.common_tags,
     map(
       "Name", "kafka-${var.deployment_identifier}"
     )
-  )
+  )}"
 }
 
 resource "aws_volume_attachment" "kafka" {
-  device_name = var.data_device_name
-  volume_id   = aws_ebs_volume.kafka.id
-  instance_id = aws_instance.kafka.id
+  device_name = "${var.data_device_name}"
+  volume_id   = "${aws_ebs_volume.kafka.id}"
+  instance_id = "${aws_instance.kafka.id}"
 }
