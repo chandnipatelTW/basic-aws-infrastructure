@@ -29,3 +29,19 @@ variable "bastion_security_group_id" {
 variable "emr_security_group_id" {
   description = "Id of EMR cluster security group to Kafka & Zookeeper ingress"
 }
+
+variable "data_volume_type" {
+  description = "Type of the volume where Kafka and Zookeeper data resides"
+  default = "gp2"
+}
+
+variable "data_volume_size" {
+  description = "Size, in GB, of the volume where Kafka and Zookeeper data resides"
+}
+
+variable "data_device_name" {
+  description = "Name of the device for the volume where Kafka and Zookeeper data resides"
+  default = "/dev/sdf"
+}
+
+
