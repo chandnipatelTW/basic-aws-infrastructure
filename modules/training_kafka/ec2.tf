@@ -12,10 +12,23 @@ resource "aws_instance" "kafka" {
       "Name", "kafka-${var.deployment_identifier}"
     )
   )}"
+}
 
-  root_block_device {
-    volume_type           = "gp2"
-    volume_size           = "110"
-    delete_on_termination = "true"
-  }
+resource "aws_ebs_volume" "kafka" {
+  availability_zone = "${var.aws_region}a"
+  size              = 110
+  type              = "gp2"
+
+  tags = "${merge(
+    local.common_tags,
+    map(
+      "Name", "kafka-${var.deployment_identifier}"
+    )
+  )}"
+}
+
+resource "aws_volume_attachment" "kafka" {
+  device_name = "/dev/sdf"
+  volume_id   = "${aws_ebs_volume.kafka.id}"
+  instance_id = "${aws_instance.kafka.id}"
 }
