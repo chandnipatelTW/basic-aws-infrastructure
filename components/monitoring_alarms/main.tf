@@ -34,13 +34,19 @@ resource "aws_cloudwatch_metric_alarm" "failed_app_alarm" {
   metric_name = "AppsRunning"
   period = "300",
   evaluation_periods = "1",
+  datapoints_to_alarm = 1,
   statistic = "Average",
+  insufficient_data_actions = [
+    "${var.sns_alert_topic_arn}"
+  ],
+  ok_actions = [],
   alarm_actions = [
     "${var.sns_alert_topic_arn}"
   ],
   dimensions {
     JobFlowId = "${data.terraform_remote_state.training_emr_cluster.emr_cluster_id}"
-  }
+  },
+  actions_enabled = true
 }
 
 resource "aws_cloudwatch_metric_alarm" "kafka_disc_usage_alarm" {
@@ -54,6 +60,10 @@ resource "aws_cloudwatch_metric_alarm" "kafka_disc_usage_alarm" {
   evaluation_periods = "1",
   datapoints_to_alarm = 1,
   statistic = "Average",
+  insufficient_data_actions = [
+    "${var.sns_alert_topic_arn}"
+  ],
+  ok_actions = [],
   alarm_actions = [
     "${var.sns_alert_topic_arn}"
   ],
@@ -61,5 +71,6 @@ resource "aws_cloudwatch_metric_alarm" "kafka_disc_usage_alarm" {
     MountPath = "/",
     InstanceId = "${data.terraform_remote_state.training_kafka.kafka_instance_id}",
     Filesystem = "/dev/xvda1"
-  }
+  },
+  actions_enabled = true
 }
