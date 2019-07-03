@@ -14,7 +14,7 @@ resource "aws_instance" "kafka" {
       property_name=$2
       property_value=$3
 
-      sed -i '' -r "s/^$${property_name}=(.*)$/$${property_name}=$${property_value}/g" $${property_file}
+      sed -i -r "s/^$${property_name}=(.*)$/$${property_name}=$${property_value}/g" $${property_file}
     }
 
     set -e
