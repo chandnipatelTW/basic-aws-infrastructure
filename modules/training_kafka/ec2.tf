@@ -45,13 +45,19 @@ resource "aws_instance" "kafka" {
       mv /etc/fstab.orig /etc/fstab
     fi
 
-    chown $${owner}:$${owner_group} $${dir_path}
-
     mkdir -p "$${kafka_data_dir}"
     mkdir -p "$${zookeeper_data_dir}"
 
+    chown --recursive $${owner}:$${owner_group} $${dir_path}
+
     replace_property_value /etc/kafka/server.properties "log.dirs" "$${kafka_data_dir}"
     replace_property_value /etc/kafka/zookeeper.properties "dataDir" "$${zookeeper_data_dir}"
+
+    sudo systemctl enable confluent-zookeeper
+    sudo systemctl start confluent-zookeeper
+
+    sudo systemctl enable confluent-kafka
+    sudo systemctl start confluent-kafka
 
     EOT
 
@@ -81,8 +87,8 @@ resource "aws_volume_attachment" "kafka" {
   volume_id   = "${aws_ebs_volume.kafka.id}"
   instance_id = "${aws_instance.kafka.id}"
 
-  provisioner "remote-exec" {
-    when   = "destroy"
-    inline = ["umount ${var.data_dir}"]
-  }
+//  provisioner "remote-exec" {
+//    when   = "destroy"
+//    inline = ["umount ${var.data_dir}"]
+//  }
 }

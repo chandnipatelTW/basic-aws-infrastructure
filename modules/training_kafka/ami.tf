@@ -4,6 +4,6 @@ data "aws_ami" "training_kafka" {
 
   filter {
     name   = "name"
-    values = ["data-eng-kafka-training-*"]
+    values = ["data-eng-kafka-training-1562214921"]
   }
 }

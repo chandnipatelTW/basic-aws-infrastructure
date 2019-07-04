@@ -22,9 +22,6 @@ EOF
 # Install Confluent platform
 sudo yum clean all && sudo yum install -y confluent-platform-oss-${CONFLUENT_SCALA_VERSION}
 
-sudo systemctl enable confluent-zookeeper
-sudo systemctl enable confluent-kafka
-
 # Install cloud watch agent prerequirement
 sudo yum install -y perl-Switch perl-DateTime perl-Sys-Syslog perl-LWP-Protocol-https perl-Digest-SHA.x86_64
 curl https://aws-cloudwatch.s3.amazonaws.com/downloads/CloudWatchMonitoringScripts-1.2.2.zip -O
