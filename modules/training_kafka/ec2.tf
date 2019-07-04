@@ -27,6 +27,9 @@ resource "aws_instance" "kafka" {
     kafka_data_dir="$${dir_path}/kafka"
     zookeeper_data_dir="$${dir_path}/zookeeper"
 
+    # Give some time for the volume attachment to complete
+    sleep 1m
+
     mkfs -t xfs $${device_name}
 
     mkdir $${dir_path}
