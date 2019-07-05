@@ -1,0 +1,13 @@
+{
+  "name": "emr-rule-formatter",
+  "version": "1.0.0",
+  "description": "This Lambda function will format EMR error messages to human readable format.",
+  "main": "index.js",
+  "scripts": {
+    "package": "zip -r emr-rule-formatter-lambda.zip * -x *.zip *.json *.log *.tf *.md"
+  },
+  "dependencies": {
+    "aws-sdk": "latest"
+  },
+  "license": "BSD-2-Clause"
+}

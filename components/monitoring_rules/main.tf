@@ -16,17 +16,72 @@ data "terraform_remote_state" "training_emr_cluster" {
   }
 }
 
-data "aws_iam_policy_document" "sns_topic_policy" {
-  statement {
-    effect  = "Allow"
-    actions = ["SNS:Publish"]
+resource "aws_iam_role" "emr_rule_formatter_lambda_role" {
+  name = "LambdaRole"
 
-    principals {
-      type        = "Service"
-      identifiers = ["events.amazonaws.com"]
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
     }
+  ]
+}
+EOF
+}
 
-    resources = ["${var.sns_alert_topic_arn}"]
+resource "aws_iam_role_policy" "emr_rule_formatter_lambda_role_policy" {
+  name = "LambdaRolePolicy"
+  role = "${aws_iam_role.emr_rule_formatter_lambda_role.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "1",
+      "Action": [
+        "logs:CreateLogGroup",     
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Sid": "2",
+      "Effect": "Allow",
+      "Action": "sns:Publish",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+data "archive_file" "emr_rule_formatter_lambda_archive" {
+  type        = "zip"
+  source_file = "${path.module}/../../functions/emr-rule-formatter/index.js"
+  output_path = "${path.module}/../../functions/emr-rule-formatter/emr-rule-formatter-lambda.zip"
+}
+
+resource "aws_lambda_function" "emr_rule_formatter_lambda" {
+  function_name    = "emr_rule_formatter_lambda"
+  handler          = "index.handler"
+  runtime          = "nodejs8.10"
+  filename         = "${path.module}/../../functions/emr-rule-formatter/emr-rule-formatter-lambda.zip"
+  source_code_hash = "${data.archive_file.emr_rule_formatter_lambda_archive.output_base64sha256}"
+  role             = "${aws_iam_role.emr_rule_formatter_lambda_role.arn}"
+  
+  environment {
+    variables {
+      sns_topic_arn = "${var.sns_alert_topic_arn}"
+    }
   }
 }
 
@@ -54,13 +109,8 @@ resource "aws_cloudwatch_event_rule" "main" {
 PATTERN
 }
 
-resource "aws_cloudwatch_event_target" "sns" {
+resource "aws_cloudwatch_event_target" "lambda" {
   rule      = "${aws_cloudwatch_event_rule.main.name}"
-  target_id = "SendToSNS-${var.cohort}"
-  arn       = "${var.sns_alert_topic_arn}"
-}
-
-resource "aws_sns_topic_policy" "default" {
-  arn    = "${var.sns_alert_topic_arn}"
-  policy = "${data.aws_iam_policy_document.sns_topic_policy.json}"
+  target_id = "SendToLambda-${var.cohort}"
+  arn       = "${aws_lambda_function.emr_rule_formatter_lambda.arn}"
 }

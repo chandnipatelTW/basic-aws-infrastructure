@@ -14,6 +14,7 @@ dataeng*
 kms_key_arn.tfvars
 .idea
 /root
+*.zip
 
 *.swp
 .DS_Store
