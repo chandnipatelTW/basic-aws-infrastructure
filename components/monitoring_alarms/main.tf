@@ -32,7 +32,7 @@ resource "aws_cloudwatch_metric_alarm" "emr-apps-running" {
   threshold = "6",
   namespace = "AWS/ElasticMapReduce"
   metric_name = "AppsRunning"
-  period = "300",
+  period = "900",
   evaluation_periods = "1",
   datapoints_to_alarm = 1,
   statistic = "Average",
