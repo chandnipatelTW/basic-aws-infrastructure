@@ -17,7 +17,7 @@ data "terraform_remote_state" "training_emr_cluster" {
 }
 
 resource "aws_iam_role" "emr_rule_formatter_lambda_role" {
-  name = "LambdaRole"
+  name = "lambda-role-${var.cohort}"
 
   assume_role_policy = <<EOF
 {
@@ -71,7 +71,7 @@ data "archive_file" "emr_rule_formatter_lambda_archive" {
 }
 
 resource "aws_lambda_function" "emr_rule_formatter_lambda" {
-  function_name    = "emr_rule_formatter_lambda"
+  function_name    = "emr-rule-formatter-lambda-${var.cohort}"
   handler          = "index.handler"
   runtime          = "nodejs8.10"
   filename         = "${path.module}/../../functions/emr-rule-formatter/emr-rule-formatter-lambda.zip"
