@@ -57,4 +57,9 @@ variable "aws_region" {
   description = "Region in which to build resources."
 }
 
+variable "instance_count" {
+  description = "Number of instances to create"
+  default = "3"
+}
+
 

@@ -1,4 +1,5 @@
 resource "aws_instance" "kafka" {
+  count                  = "${var.instance_count}"
   ami                    = "${data.aws_ami.training_kafka.image_id}"
   instance_type          = "${var.instance_type}"
   vpc_security_group_ids = ["${aws_security_group.kafka.id}"]
@@ -67,12 +68,13 @@ resource "aws_instance" "kafka" {
   tags = "${merge(
     local.common_tags,
     map(
-      "Name", "kafka-${var.deployment_identifier}"
+      "Name", "kafka-instance-${var.deployment_identifier}-${count.index + 1}"
     )
   )}"
 }
 
 resource "aws_ebs_volume" "kafka" {
+  count             = "${var.instance_count}"
   availability_zone = "${var.aws_region}a"
   size              = "${var.data_volume_size}"
   type              = "${var.data_volume_type}"
@@ -80,15 +82,16 @@ resource "aws_ebs_volume" "kafka" {
   tags = "${merge(
     local.common_tags,
     map(
-      "Name", "kafka-${var.deployment_identifier}"
+      "Name", "kafka-volume-${var.deployment_identifier}-${count.index + 1}"
     )
   )}"
 }
 
 resource "aws_volume_attachment" "kafka" {
+  count       = "${var.instance_count}"
   device_name = "${var.data_device_name}"
-  volume_id   = "${aws_ebs_volume.kafka.id}"
-  instance_id = "${aws_instance.kafka.id}"
+  volume_id   = "${element(aws_ebs_volume.kafka.*.id, count.index)}"
+  instance_id = "${element(aws_instance.kafka.*.id, count.index)}"
 
 //  provisioner "remote-exec" {
 //    when   = "destroy"
