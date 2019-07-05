@@ -18,6 +18,16 @@ resource "aws_security_group" "master" {
 
 }
 
+resource "aws_security_group_rule" "airflow_ssh" {
+  type                     = "ingress"
+  security_group_id        = "${aws_security_group.master.id}"
+  source_security_group_id = "${var.airflow_security_group_id}"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  description              = "SSH from Airflow to EMR"
+}
+
 resource "aws_security_group_rule" "master_egress" {
   type              = "egress"
   security_group_id = "${aws_security_group.master.id}"
