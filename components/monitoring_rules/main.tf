@@ -36,7 +36,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "emr_rule_formatter_lambda_role_policy" {
-  name = "LambdaRolePolicy"
+  name = "lambda-role-policy-for-sns-and-logs-send"
   role = "${aws_iam_role.emr_rule_formatter_lambda_role.id}"
 
   policy = <<EOF
