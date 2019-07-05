@@ -22,6 +22,16 @@ resource "aws_security_group_rule" "bastion_ssh" {
   description              = "SSH from Bastion to Kafka"
 }
 
+resource "aws_security_group_rule" "airflow_ssh" {
+  type                     = "ingress"
+  security_group_id        = "${aws_security_group.kafka.id}"
+  source_security_group_id = "${var.airflow_security_group_id}"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  description              = "SSH from Airflow to Kafka"
+}
+
 resource "aws_security_group_rule" "kafka_egress" {
   type              = "egress"
   security_group_id = "${aws_security_group.kafka.id}"

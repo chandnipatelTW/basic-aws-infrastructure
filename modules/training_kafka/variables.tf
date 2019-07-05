@@ -26,6 +26,10 @@ variable "bastion_security_group_id" {
   description = "Id of bastion security group to allow SSH ingress"
 }
 
+variable "airflow_security_group_id" {
+  description = "Id of airflow security group to allow SSH ingress"
+}
+
 variable "emr_security_group_id" {
   description = "Id of EMR cluster security group to Kafka & Zookeeper ingress"
 }
