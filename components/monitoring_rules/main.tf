@@ -114,3 +114,11 @@ resource "aws_cloudwatch_event_target" "lambda" {
   target_id = "SendToLambda-${var.cohort}"
   arn       = "${aws_lambda_function.emr_rule_formatter_lambda.arn}"
 }
+
+resource "aws_lambda_permission" "trigger_lambda_from_cloudwatch_rule" {
+  statement_id = "AllowExecutionFromCloudWatch"
+  action = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.emr_rule_formatter_lambda.function_name}"
+  principal = "events.amazonaws.com"
+  source_arn = "${aws_cloudwatch_event_rule.main.arn}"
+}
