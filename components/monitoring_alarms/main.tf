@@ -25,11 +25,11 @@ data "terraform_remote_state" "training_emr_cluster" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "failed_app_alarm" {
-  alarm_name = "platform-not-up-for-${var.cohort}",
-  alarm_description = "${var.cohort}: Alert for when all of the applications of streaming pipeline are not up"
+resource "aws_cloudwatch_metric_alarm" "emr-apps-running" {
+  alarm_name = "[${var.cohort}] EMR applications not running",
+  alarm_description = "${var.cohort}: Alert when some EMR applications are not running"
   comparison_operator = "LessThanThreshold",
-  threshold = "5",
+  threshold = "6",
   namespace = "AWS/ElasticMapReduce"
   metric_name = "AppsRunning"
   period = "300",
