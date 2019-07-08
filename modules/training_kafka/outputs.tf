@@ -10,5 +10,5 @@ output "kafka_security_group_id" {
 
 output "kafka_instance_id" {
   description = "The instance id."
-  value       = "${aws_instance.kafka.*.id}"
+  value       = "${aws_instance.kafka.id}"
 }

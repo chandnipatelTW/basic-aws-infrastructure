@@ -3,5 +3,5 @@ resource "aws_route53_record" "kafka" {
   name    = "kafka"
   type    = "CNAME"
   ttl     = "60"
-  records = ["${aws_instance.kafka.*.private_dns}"]
+  records = ["${aws_instance.kafka.private_dns}"]
 }
