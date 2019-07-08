@@ -29,7 +29,7 @@ resource "aws_cloudwatch_metric_alarm" "emr-apps-running" {
   alarm_name = "[${var.cohort}] EMR applications not running",
   alarm_description = "${var.cohort}: Alert when some EMR applications are not running"
   comparison_operator = "LessThanThreshold",
-  threshold = "6",
+  threshold = "4",
   namespace = "AWS/ElasticMapReduce"
   metric_name = "AppsRunning"
   period = "900",
