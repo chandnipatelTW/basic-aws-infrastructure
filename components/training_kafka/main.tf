@@ -34,11 +34,21 @@ data "terraform_remote_state" "training_emr_cluster" {
   }
 }
 
+data "terraform_remote_state" "training_airflow" {
+  backend = "s3"
+  config {
+    key    = "training_airflow.tfstate"
+    bucket = "tw-dataeng-${var.cohort}-tfstate"
+    region = "${var.aws_region}"
+  }
+}
+
 module "training_kafka" {
   source = "../../modules/training_kafka"
 
   bastion_security_group_id = "${data.terraform_remote_state.bastion.bastion_security_group_id}"
   emr_security_group_id     = "${data.terraform_remote_state.training_emr_cluster.security_group_id}"
+  airflow_security_group_id = "${data.terraform_remote_state.training_airflow.airflow_security_group_id}"
   deployment_identifier     = "data-eng-${var.cohort}"
   vpc_id                    = "${data.terraform_remote_state.base_networking.vpc_id}"
   subnet_id                 = "${data.terraform_remote_state.base_networking.private_subnet_ids[0]}"
