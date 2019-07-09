@@ -36,6 +36,7 @@ echo "creating bootstrap RDS instance ${DB_INSTANCE_ID}"
 aws rds create-db-instance \
     --db-name ${DB_NAME} \
     --db-instance-identifier ${DB_INSTANCE_ID} \
+    --db-subnet-group-name ${COHORT}-bootstrap-db-subnet-group \
     --allocated-storage 30 \
     --db-instance-class db.t2.micro \
     --storage-type gp2 \
