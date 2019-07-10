@@ -98,12 +98,8 @@ This can be achieved with the `./scripts/create_key_pair.sh` script.
 
 ### Creating an initial RDS snapshot for Airflow
 
-As with the EC2 keypair, configuring the password for the RDS Postgresql database
-used by airflow is best done outside terraform. This is achieved by creating an initial
-blank database snapshot with the desired password which can then be used by terraform
-to build the RDS cluster.
+Please refer to [Open Issue about airflow automated deployment](https://github.com/chandnipatelTW/basic-aws-infrastructure/issues/3)
 
-The password is saved in Parameter store for future use.
 
 ```
 ./scripts/bootstrap_rds.sh $TRAINING_COHORT airflow
@@ -173,7 +169,7 @@ Press Create Route.
 
 Repeat for the other two public subnets.
 
-### Using VPN
+### Obtaining VPN config file
 
 #### Make a client certs
 
@@ -201,10 +197,7 @@ Next run this script to get the VPN client config file.
 ./manage.sh client_config clientname
 ```
 
-This will generate a file like: `certs/clientname.${TRAINING_COHORT}.training.ovpn`
-
-
-Download [Viscosity VPN Client](https://www.sparklabs.com/viscosity/) and import the *.ovpn file there. Click connect :D
+This will generate a file like: `certs/clientname.${TRAINING_COHORT}.training.ovpn`. You will use it to connect to the environment later.
 
 
 ### Obtaining SSH private key
@@ -221,15 +214,23 @@ Download from EC2 parameter store:
 ./scripts/get_key_pair.sh $TRAINING_COHORT
 ```
 
-### Configuring SSH
+### Conecting to machines inside the environment
 
-Generate ssh config:
+You have to copy the just generated OpenVPN config file and SSH key to your local machine (outside the docker) 
 
-```
-./scripts/generate_ssh_config.sh $TRAINING_COHORT
-```
 
-### All set!
+`docker cp <containerId>:/file/path/within/container /host/path/target`
+
+
+For example:
+
+`docker cp ebebb0e870bc1:/root/.ssh/config ~/.ssh/`
+
+`docker cp ebebb0e870bc1:/root/project/certs/clientname.${TRAINING_COHORT}.training.ovpn ~/ovpn/`
+
+
+Now download [Viscosity VPN Client](https://www.sparklabs.com/viscosity/) and import the *.ovpn file there. Click connect :D
+
 
 When connected to the VPN, the following SSH commands should work:
 
