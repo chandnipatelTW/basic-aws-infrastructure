@@ -16,6 +16,8 @@ docker-compose run --rm infrabox
 
 Inside the container, the contents of this repo will be available under `/project`.
 
+NOTE - Run the following commands from within the docker container.
+
 ### Authenticating with AWS
 
 If are using an Okta federated AWS account,
