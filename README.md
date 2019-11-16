@@ -1,8 +1,10 @@
-This repo contains automation to build a standalone environment for data engineering training.
+This repo contains automation to build a standalone environment for the data engineering training program (TWDU).
 
 # Setting up a new Account
 
-## 1) Configuring your local environment
+## 1) Requisition a new AWS environment
+## 2) Fork this repo
+## 3) Run docker to generate and upload certificates
 
 ### Dependencies
 
@@ -15,8 +17,6 @@ docker-compose run --rm infrabox
 ```
 
 Inside the container, the contents of this repo will be available under `/project`.
-
-NOTE - Run the following commands from within the docker container.
 
 ### Authenticating with AWS
 
@@ -57,16 +57,6 @@ export AWS_DEFAULT_REGION=us-east-2
 export TRAINING_COHORT=chicago-fall-2018
 ```
 
-## 2) Preliminary Bootstraping
-
-### Creating a bucket for Terraform state
-
-Invoke `.scripts/create_tf_state_bucket.sh` to create a bucket for holding terraform state.
-
-
-```
-./scripts/create_tf_state_bucket.sh $TRAINING_COHORT
-```
 
 ### Creating VPN certs
 
@@ -97,8 +87,25 @@ This can be achieved with the `./scripts/create_key_pair.sh` script.
 ```
 ./scripts/create_key_pair.sh $TRAINING_COHORT
 ```
+## 4) Create CircleCI IAM user in AWS
+## 5) Configure Circle CI to use correct environment variables and access AWS
 
-### Creating an initial RDS snapshot for Airflow
+## 6) Run master branch in Circle CI
+
+Circle CI will do the following things for you, but we have written it out here in case there are issues.   
+
+### 1) First Time Set Up
+
+#### Creating a bucket for Terraform state
+
+Invoke `.scripts/create_tf_state_bucket.sh` to create a bucket for holding terraform state.
+
+
+```
+./scripts/create_tf_state_bucket.sh $TRAINING_COHORT
+```
+
+#### Creating an initial RDS snapshot for Airflow
 
 Please refer to [Open Issue about airflow automated deployment](https://github.com/chandnipatelTW/basic-aws-infrastructure/issues/3)
 
@@ -107,20 +114,20 @@ Please refer to [Open Issue about airflow automated deployment](https://github.c
 ./scripts/bootstrap_rds.sh $TRAINING_COHORT airflow
 ```
 
-### Building an AMI for Kafka
+### 2) Building an AMI for Kafka
 
 ```
 ./scripts/build_ami.sh training_kafka
 ```
 
-### Building an AMI for Ingester
+#### Building an AMI for Ingester
 
 ```
 ./scripts/build_ami.sh training_ingester
 ```
 
 
-## 3) Building Terraform components
+### 3) Building Terraform components for production
 
 The AWS resources that comprise the training environment are automated with Terraform.
 This automation is split up into several components, each concerned with building a
@@ -141,27 +148,26 @@ desired AWS region.
 ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply
 ```
 
-## 4) Connecting to the environment
 
-### Preparing AWS Client VPN 
+## 7) Preparing AWS Client VPN 
 
 Currently is not possible to automate some VPN configs with Terraform, so for now you need to do it manually.
 
 Go to AWS Management Console > VPC > Client VPN and select the VPN Endpoint that Terraform just created
 
-#### Configure Security Groups:
+##### Configure Security Groups:
 
 With the Client VPN Endpoint Selected, go to Security Groups Tab, choose the only VPC and press Apply Security Groups.
 
 Select the security groups that the VPN needs to access to EMR, Kafka, Ingester, Airflow. And press "Apply Security Groups"
 
-#### Add user Authorization Ingress:
+##### Add user Authorization Ingress:
 
 With the Client VPN Endpoint Selected, go to Authorization Tab, choose the only VPC and press Authorize Ingress
 
 Add `0.0.0.0/0` as Destination network to enable  and Allow access to all users. Press "Add Authorization Rule".
 
-#### Add route table to client vpn with publics subnets:
+##### Add route table to client vpn with publics subnets:
 
 With the Client VPN Endpoint Selected, go to Authorization Tab.
 
@@ -170,6 +176,9 @@ Press Create Route.
 `0.0.0.0/0` as Route destination, then select one of the public subnets. And press "Create Route"
 
 Repeat for the other two public subnets.
+
+## 8) Connecting to the environment
+Obtain a VPN config file and ssh key pair.  (Note you may need to refresh your Okta credentials.)
 
 ### Obtaining VPN config file
 
@@ -184,7 +193,7 @@ cd CA
 
 This will generate 2 files: `certs/cpatel.${TRAINING_COHORT}.training.pem` and `certs/cpatel.${TRAINING_COHORT}.training-key.pem`
 
-#### Create a client config file
+##### Create a client config file
 With the root, server and client certs you will generate now openvpn config files (one for each client).
 
 Export a variable with the *Client VPN EndpointID* that you'll get as a result of clien_vpn component creation in Terraform. Also you can find it in AWS > VPC Dashboard > Virtual Private Network (VPN) > Client VPN Endpoints. eg: cvpn-endpoint-0d4b52bbe4393d9f1
