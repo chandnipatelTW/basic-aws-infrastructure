@@ -4,7 +4,7 @@ This repo contains automation to build a standalone environment for the data eng
 
 ## 1) Requisition a new AWS environment
 ## 2) Fork this repo
-## 3) Run docker to generate and upload certificates
+## 3) Run docker to generate and upload certificates and ssh key pair
 
 ### Dependencies
 
