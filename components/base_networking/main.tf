@@ -14,8 +14,6 @@ module "training_vpc" {
   vpc_cidr              = "10.0.0.0/16"
   private_dns_zone_name = "${var.cohort}.training"
   availability_zones = [
-    "${var.aws_region}a",
-    "${var.aws_region}b",
-    "${var.aws_region}c"
+    "${var.aws_region}a"
   ]
 }

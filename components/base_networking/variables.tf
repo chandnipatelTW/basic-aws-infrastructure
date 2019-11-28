@@ -1,5 +1,5 @@
 variable "cohort" {
-  description = "Training cohort, eg: london-summer-2018"
+  description = "Training cohort, eg: twdu"
 }
 
 variable "aws_region" {
